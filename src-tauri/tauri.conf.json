@@ -7,7 +7,8 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "tauri-ui"
+    "productName": "Linkit",
+    "version": "0.0.1"
   },
   "tauri": {
     "allowlist": {
@@ -20,7 +21,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "Assistant Tool",
       "copyright": "",
       "deb": {
         "depends": []
@@ -33,7 +34,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.agmmnn.dev",
+      "identifier": "linkit.tsundata.com",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -61,13 +62,13 @@
     "windows": [
       {
         "fullscreen": false,
-        "title": "Tauri UI",
+        "title": "Linkit",
         "center": true,
         "resizable": true,
         "decorations": false,
         "transparent": true,
-        "height": 920,
-        "width": 1300
+        "height": 720,
+        "width": 1200
       }
     ]
   }

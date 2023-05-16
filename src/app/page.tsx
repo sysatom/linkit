@@ -1,5 +1,5 @@
-import MusicPage from "./examples/music/page"
+import DashboardPage from "@/app/examples/dashboard/page";
 
 export default function App() {
-  return <MusicPage />
+  return <DashboardPage />
 }

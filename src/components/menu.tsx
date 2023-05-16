@@ -224,7 +224,7 @@ export function Menu() {
         <Button
           onClick={maximizeWindow}
           variant="ghost"
-          className="h-8 focus:outline-none"
+          className="h-8 focus:outline-none hidden"
         >
           <Maximize className="h-4 w-4" />
         </Button>
