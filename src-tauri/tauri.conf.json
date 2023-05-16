@@ -21,7 +21,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "Assistant Tool",
+      "category": "Utility",
       "copyright": "",
       "deb": {
         "depends": []
