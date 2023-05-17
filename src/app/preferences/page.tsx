@@ -2,15 +2,11 @@ import { Metadata } from "next"
 
 import { cn } from "@/lib/utils"
 
-import { DemoCookieSettings } from "./components/cookie-settings"
-import { DemoCreateAccount } from "./components/create-account"
-import { DemoDatePicker } from "./components/date-picker"
-import { DemoGithub } from "./components/github-card"
-import { DemoNotifications } from "./components/notifications"
-import { DemoPaymentMethod } from "./components/payment-method"
-import { DemoReportAnIssue } from "./components/report-an-issue"
-import { DemoShareDocument } from "./components/share-document"
-import { DemoTeamMembers } from "./components/team-members"
+import { OtherSettings } from "./components/other-settings"
+import { AccessToken } from "./components/access-token"
+import { RequestInterval } from "./components/request-interval"
+import { Notifications } from "./components/notifications"
+import { Logging } from "@/app/preferences/components/logging";
 import "./styles.css"
 
 export const metadata: Metadata = {
@@ -18,7 +14,7 @@ export const metadata: Metadata = {
   description: "Examples of cards built using the components.",
 }
 
-function DemoContainer({
+function Container({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
@@ -37,34 +33,23 @@ export default function PreferencesPage() {
   return (
     <div className="items-start justify-center gap-6 rounded-lg p-8 md:grid lg:grid-cols-2 xl:grid-cols-3">
       <div className="col-span-2 grid items-start gap-6 lg:col-span-1">
-        <DemoContainer>
-          <DemoCreateAccount />
-        </DemoContainer>
-        <DemoContainer>
-          <DemoPaymentMethod />
-        </DemoContainer>
+        <Container>
+          <AccessToken />
+        </Container>
+        <Container>
+          <OtherSettings />
+        </Container>
       </div>
       <div className="col-span-2 grid items-start gap-6 lg:col-span-1">
-        <DemoContainer>
-          <DemoShareDocument />
-        </DemoContainer>
-        <DemoContainer>
-          <DemoDatePicker />
-        </DemoContainer>
-        <DemoContainer>
-          <DemoNotifications />
-        </DemoContainer>
-      </div>
-      <div className="col-span-2 grid items-start gap-6 lg:col-span-1 lg:grid-cols-2 xl:grid-cols-1">
-        <DemoContainer>
-          <DemoReportAnIssue />
-        </DemoContainer>
-        <DemoContainer>
-          <DemoGithub />
-        </DemoContainer>
-        <DemoContainer>
-          <DemoCookieSettings />
-        </DemoContainer>
+        <Container>
+          <RequestInterval />
+        </Container>
+        <Container>
+          <Notifications />
+        </Container>
+        <Container>
+          <Logging />
+        </Container>
       </div>
     </div>
   )
