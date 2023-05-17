@@ -1,9 +1,7 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
 
-import { fontMono, fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
-import { Greeting } from "@/components/greeting"
 import { Menu } from "@/components/menu"
 import { StyleSwitcher } from "@/components/style-switcher"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
@@ -14,7 +12,6 @@ export default function MyApp({ children }) {
     <html lang="en" suppressHydrationWarning>
       <head />
       <body className="bg-transparent font-sans antialiased scrollbar-none">
-        <Greeting />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="h-screen overflow-clip rounded-lg border">
             <Menu />

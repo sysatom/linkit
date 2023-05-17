@@ -1,4 +1,4 @@
-import DashboardPage from "@/app/examples/dashboard/page";
+import DashboardPage from "@/app/dashboard/page";
 
 export default function App() {
   return <DashboardPage />
