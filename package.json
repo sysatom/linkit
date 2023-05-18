@@ -41,7 +41,7 @@
     "@radix-ui/react-toggle-group": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.5",
     "@tailwindcss/line-clamp": "^0.4.4",
-    "@tauri-apps/api": "2.0.0-alpha.3",
+    "@tauri-apps/api": "^1.3.0",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
     "cmdk": "^0.2.0",
@@ -56,11 +56,12 @@
     "react-wrap-balancer": "^0.4.1",
     "recharts": "^2.5.0",
     "tailwind-merge": "^1.12.0",
-    "tailwindcss-animate": "^1.0.5"
+    "tailwindcss-animate": "^1.0.5",
+    "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^3.7.2",
-    "@tauri-apps/cli": "2.0.0-alpha.8",
+    "@tauri-apps/cli": "^1.3.1",
     "@types/node": "^20.1.0",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",

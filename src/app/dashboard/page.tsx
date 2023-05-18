@@ -1,4 +1,4 @@
-import { Metadata } from "next"
+'use client'
 
 import { Activity, CreditCard, DollarSign, Users } from "lucide-react"
 
@@ -12,13 +12,17 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Overview } from "@/app/dashboard/components/overview"
 import { RecentSales } from "@/app/dashboard/components/recent-sales"
+import {useEffect} from "react";
+import {store} from "@/helpers/store";
+import fetcher from "@/helpers/http";
+import {OPERATE} from "@/constants/ACTION";
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Example dashboard app using the components.",
-}
+export default async function DashboardPage() {
+  useEffect(() => {
+    store.set("token", "8eaq43fulut6sj0wpnstiin4c").then(console.log).catch(console.error)
+    fetcher(OPERATE.bots).then(console.log).catch(console.error)
+  })
 
-export default function DashboardPage() {
   return (
     <div className="flex-col md:flex">
       <div className="flex-1 space-y-4 p-8 pt-6">
