@@ -9,16 +9,36 @@ import {
 } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import {useEffect, useState} from "react";
-import fetcher from "@/helpers/http";
-import {OPERATE} from "@/constants/ACTION";
-import {IBot} from "@/types";
+import {store} from "@/helpers/store";
+import {useEffect, useState} from "react/index";
 
-export function BotsSwitch() {
-  const [bots, setBots] = useState<IBot>(null)
+export function BotsSwitch({ bots }) {
+  let [botSwitch, setBotSwitch] = useState<Map<String, boolean>>(new Map<string, any>());
+  const handleUpdateValue = (key:string, newValue:boolean) => {
+    const newMap = new Map<String, boolean>(Array.from(botSwitch).map(([k, v]) => (k === key ? [k, newValue] : [k, v])));
+    newMap.set(key, newValue);
+    store.set("bot-switch", JSON.stringify(Array.from(newMap))).then(console.log).catch(console.error);
+    setBotSwitch(newMap);
+  };
 
-  useEffect(()=> {
-    fetcher(OPERATE.bots).then(v => setBots(v)).catch(console.error)
+  useEffect(() => {
+    const getBotSwitch = async () => {
+      const value = await store.get("bot-switch");
+      if (value) {
+        let result = JSON.parse(value as string);
+        if (result) {
+          let m = result as Array<any>
+          if (m != undefined) {
+            const newMap = new Map<String, boolean>()
+            m.forEach(([key, value]) => {
+              newMap.set(key, value);
+            });
+            setBotSwitch(newMap);
+          }
+        }
+      }
+    }
+    getBotSwitch().then(console.log).catch(console.error);
   }, [])
 
   return (
@@ -38,7 +58,7 @@ export function BotsSwitch() {
               its features.
             </span>
             </Label>
-            <Switch id={i.id} defaultChecked />
+            <Switch id={i.id} defaultChecked onCheckedChange={checked => {handleUpdateValue(i.id, checked)}}/>
           </div>) :
             <div className="text-center">empty</div>
         }

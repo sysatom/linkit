@@ -3,7 +3,7 @@ import {API_ENDPOINTS} from "@/constants/API";
 
 export default async function fetcher<JSON = any>(
     action: string,
-    content?: Object
+    content?: Object | String
 ): Promise<JSON> {
     const bearerToken = await store.get("token");
 
