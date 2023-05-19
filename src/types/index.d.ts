@@ -7,3 +7,10 @@ export interface IUser {
         avatar: string;
     };
 }
+
+export interface IBot {
+    bots: {
+        id: string;
+        name: string;
+    }[];
+}
