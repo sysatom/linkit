@@ -13,15 +13,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Overview } from "@/app/dashboard/components/overview"
 import { RecentSales } from "@/app/dashboard/components/recent-sales"
 import {useEffect} from "react";
-import {store} from "@/helpers/store";
 import fetcher from "@/helpers/http";
 import {OPERATE} from "@/constants/ACTION";
 
 export default async function DashboardPage() {
   useEffect(() => {
-    store.set("token", "8eaq43fulut6sj0wpnstiin4c").then(console.log).catch(console.error)
     fetcher(OPERATE.bots).then(console.log).catch(console.error)
-  })
+  }, [])
 
   return (
     <div className="flex-col md:flex">

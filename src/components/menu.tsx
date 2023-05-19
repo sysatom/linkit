@@ -7,24 +7,18 @@ import { Globe, Maximize, Mic, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   Menubar,
-  MenubarCheckboxItem,
   MenubarContent,
   MenubarItem,
-  MenubarLabel,
   MenubarMenu,
-  MenubarRadioGroup,
-  MenubarRadioItem,
   MenubarSeparator,
   MenubarShortcut,
-  MenubarSub,
-  MenubarSubContent,
-  MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar"
 
 import { ExamplesNav } from "./examples-nav"
 import { Icons } from "./icons"
 import { ModeToggle } from "./mode-toggle"
+import Link from "next/link";
 
 export function Menu() {
   const [appWindow, setAppWindow] = useState<null | WebviewWindow>(null)
@@ -57,7 +51,7 @@ export function Menu() {
   return (
     <Menubar className="rounded-none border-b border-none pl-2 lg:pl-4">
       <MenubarMenu>
-        <MenubarTrigger className="font-bold">App</MenubarTrigger>
+        <MenubarTrigger className="font-bold">Linkit</MenubarTrigger>
         <MenubarContent>
           <MenubarItem>About</MenubarItem>
           <MenubarSeparator />
@@ -73,10 +67,10 @@ export function Menu() {
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu>
-        <a href="/dashboard" className="text-sm shadow mr-4">Dashboard</a>
+        <Link href="/dashboard" className="text-sm shadow mr-4">Dashboard</Link>
       </MenubarMenu>
       <MenubarMenu>
-        <a href="/bots" className="text-sm shadow mr-4">Bots</a>
+        <Link href="/bots" className="text-sm shadow mr-4">Bots</Link>
       </MenubarMenu>
       <div
         data-tauri-drag-region

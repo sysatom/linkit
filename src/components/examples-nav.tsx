@@ -9,6 +9,7 @@ import {
   MenubarRadioItem,
   MenubarTrigger,
 } from "@/components/ui/menubar"
+import Link from "next/link";
 
 const examples = [
   {
@@ -44,11 +45,11 @@ export function ExamplesNav({ className, ...props }: ExamplesNavProps) {
       <MenubarContent forceMount>
         <MenubarRadioGroup value={pathname}>
           {examples.map((example) => (
-            <a href={example.href} key={example.name}>
+            <Link href={example.href} key={example.name}>
               <MenubarRadioItem value={example.href}>
                 {example.name}
               </MenubarRadioItem>
-            </a>
+            </Link>
           ))}
         </MenubarRadioGroup>
       </MenubarContent>

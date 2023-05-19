@@ -11,9 +11,23 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Icons } from "@/components/icons"
+import {store} from "@/helpers/store";
+import {useEffect, useState} from "react";
 
 export function AccessToken() {
+  const [token, setToken] = useState("")
+  useEffect(()=> {
+    store.get("token").then(v => setToken(String(v)))
+  }, [])
+
+  const saveToken = () => {
+    if (token == "") {
+      alert("please input token")
+      return
+    }
+    store.set("token", token).then(console.log).catch(console.error)
+  }
+
   return (
     <Card>
       <CardHeader className="space-y-1">
@@ -25,11 +39,11 @@ export function AccessToken() {
       <CardContent className="grid gap-4">
         <div className="grid gap-2">
           <Label htmlFor="password">Token</Label>
-          <Input id="password" type="password" />
+          <Input id="password" type="text" value={token} onChange={e => setToken(e.target.value)}/>
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full">Save</Button>
+        <Button className="w-full" onClick={saveToken}>Save</Button>
       </CardFooter>
     </Card>
   )
