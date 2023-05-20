@@ -6,6 +6,7 @@ import {useEffect, useState} from "react/index";
 import {IBot} from "@/types";
 import fetcher from "@/helpers/http";
 import {OPERATE} from "@/constants/ACTION";
+import "./styles.css"
 
 export default function BotsPage() {
   const [bots, setBots] = useState<IBot>(null)

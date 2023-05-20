@@ -24,14 +24,13 @@ export function BotInfo({ bots }) {
 
   let availableBots = []
   if (bots != null && bots.bots.length > 0) {
-    // availableBots = bots
-    //   ?.map((page) =>
-    //     page.bots.map((bot) => ({
-    //       label: bot.name,
-    //       id: bot.id,
-    //     }))
-    //   )
-    //   .flat();
+    bots.bots
+      .map(bot => {
+        availableBots.push({
+          label: bot.name,
+          id: bot.id,
+        })
+      });
 
     availableBots?.splice(0, 0, {
       label: "All Bots",
@@ -69,12 +68,12 @@ export function BotInfo({ bots }) {
             </thead>
             <tbody>
             {
-              Object.keys(help).map((key, i) => {
+              help != null ? Object.keys(help).map((key, i) => {
                 return help[key].map((v, j) => <tr key={`${i}-${j}`}>
-                  <td>{key}</td>
-                  <td>{v}</td>
+                  <td className="font-bold">{key}</td>
+                  <td className="text-left">{v}</td>
                 </tr>)
-              })
+              }) : <tr><td colSpan={2} className="text-center">empty</td></tr>
             }
             </tbody>
           </table>
