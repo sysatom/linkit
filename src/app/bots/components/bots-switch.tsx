@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import {store} from "@/helpers/store";
 import {useEffect, useState} from "react/index";
+import { invoke } from '@tauri-apps/api/tauri';
 
 export function BotsSwitch({ bots }) {
   let [botSwitch, setBotSwitch] = useState<Map<String, boolean>>(new Map<string, any>());
@@ -19,6 +20,9 @@ export function BotsSwitch({ bots }) {
     newMap.set(key, newValue);
     store.set("bot-switch", JSON.stringify(Array.from(newMap))).then(console.log).catch(console.error);
     setBotSwitch(newMap);
+    // emit bot switch
+    invoke('bot_switch', { message: JSON.stringify(Array.from(newMap)) })
+      .then(console.log).catch(console.error)
   };
 
   useEffect(() => {
@@ -54,8 +58,7 @@ export function BotsSwitch({ bots }) {
             <Label htmlFor="necessary" className="flex flex-col space-y-1">
               <span>{i.name}</span>
               <span className="font-normal leading-snug text-muted-foreground">
-              These cookies are essential in order to use the website and use
-              its features.
+              Bot detail ......
             </span>
             </Label>
             <Switch id={i.id}

@@ -14,17 +14,17 @@ export default function BotsPage() {
   const [bots, setBots] = useState<IBot>(null)
 
   const [output, setOutput] = useState("")
-
   const sendOutput = () => {
-    invoke('js2rs', { message: output })
+    invoke('event_emit', { message: output })
+      .then(console.log).catch(console.error)
   }
 
   useEffect(()=> {
     fetcher(OPERATE.bots).then(v => setBots(v)).catch(console.error)
 
-     listen('rs2js', (event) => {
-        console.log("rs2js: " + event.payload)
-      }).then(console.log).catch(console.error)
+    listen('event_broadcast', (event) => {
+      console.log("event_broadcast: " + event.payload)
+    }).then(console.log).catch(console.error)
   }, [])
 
   const handleChange = (event)=> {

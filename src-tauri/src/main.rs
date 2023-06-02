@@ -4,6 +4,10 @@
     windows_subsystem = "windows"
 )]
 
+mod agent;
+mod util;
+mod instruct;
+
 use tauri::Manager;
 use tokio::sync::{mpsc, Mutex};
 use tracing::info;
@@ -18,21 +22,21 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
-fn rs2js<R: tauri::Runtime>(message: String, manager: &impl Manager<R>) {
-    info!(?message, "rs2js");
-    manager
-        .emit_all("rs2js", format!("rs: {}", message))
-        .unwrap();
-}
-
 #[tauri::command]
-async fn js2rs(message: String, state: tauri::State<'_, AsyncProcInputTx>) -> Result<(), String> {
-    info!(?message, "js2rs");
+async fn event_emit(message: String, state: tauri::State<'_, AsyncProcInputTx>) -> Result<(), String> {
+    info!(?message, "event_emit");
     let async_proc_input_tx = state.inner.lock().await;
     async_proc_input_tx
         .send(message)
         .await
         .map_err(|e| e.to_string())
+}
+
+fn event_send_frontend<R: tauri::Runtime>(message: String, manager: &impl Manager<R>) {
+    info!(?message, "event_send_frontend");
+    manager
+        .emit_all("event_broadcast", format!("{}", message))
+        .unwrap();
 }
 
 fn main() {
@@ -46,7 +50,7 @@ fn main() {
         .manage(AsyncProcInputTx {
             inner: Mutex::new(async_proc_input_tx),
         })
-        .invoke_handler(tauri::generate_handler![greet, js2rs])
+        .invoke_handler(tauri::generate_handler![greet, event_emit])
         .setup(|app| {
             tauri::async_runtime::spawn(async move {
                 async_process_model(
@@ -59,7 +63,7 @@ fn main() {
             tauri::async_runtime::spawn(async move {
                 loop {
                     if let Some(output) = async_proc_output_rx.recv().await {
-                        rs2js(output, &app_handle);
+                        event_send_frontend(output, &app_handle);
                     }
                 }
             });
