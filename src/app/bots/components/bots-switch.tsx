@@ -58,7 +58,9 @@ export function BotsSwitch({ bots }) {
               its features.
             </span>
             </Label>
-            <Switch id={i.id} defaultChecked onCheckedChange={checked => {handleUpdateValue(i.id, checked)}}/>
+            <Switch id={i.id}
+                    defaultChecked={botSwitch.get(i.id)}
+                    onCheckedChange={checked => {handleUpdateValue(i.id, checked)}} />
           </div>) :
             <div className="text-center">empty</div>
         }
