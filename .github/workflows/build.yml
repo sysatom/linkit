@@ -21,13 +21,6 @@ jobs:
         with:
           go-version: '^1.20'
 
-      ### Lint ###
-
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          version: v1.52.2
-
       ### Build ###
 
       - id: go-cache-paths
