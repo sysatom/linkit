@@ -26,7 +26,7 @@ func main() {
 	// main window
 	w := a.NewWindow("Linkit")
 	w.SetContent(ui.Create(a, w))
-	w.Resize(fyne.NewSize(1280, 720))
+	w.Resize(fyne.NewSize(1000, 600))
 	w.SetMaster()
 	w.ShowAndRun()
 }
