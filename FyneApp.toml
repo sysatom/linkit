@@ -1,0 +1,8 @@
+Website = "https://github.com/sysatom/linkit"
+
+[Details]
+  Icon = "internal/assets/icon/app-icon.png"
+  Name = "Linkit"
+  ID = "com.github.sysatom.linkit"
+  Version = "0.0.1"
+  Build = 3
