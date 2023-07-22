@@ -11,6 +11,7 @@ func Create(app fyne.App, window fyne.Window) *container.AppTabs {
 		Items: []*container.TabItem{
 			newHomeTab(app, window),
 			newSettingsTab(app, window),
+			newAboutTab(app),
 		},
 	}
 
