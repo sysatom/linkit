@@ -40,7 +40,7 @@ func (s *settings) buildUI(app fyne.App) *container.Scroll {
 	pathSelector := &widget.Button{Icon: theme.FolderOpenIcon(), Importance: widget.LowImportance, OnTapped: s.onDownloadsPathSelected}
 	s.downloadPathEntry = &widget.Entry{Wrapping: fyne.TextTruncate, OnSubmitted: s.onDownloadsPathSubmitted, ActionItem: pathSelector}
 
-	s.tokenEntry = &widget.Entry{PlaceHolder: "Enter your bot access token.", OnChanged: s.onTokenChanged}
+	s.tokenEntry = &widget.Entry{PlaceHolder: "Enter your bot access token.", Password: true, OnChanged: s.onTokenChanged}
 	s.intervalEntry = &widget.Entry{PlaceHolder: "60 sec", OnChanged: s.onIntervalChanged}
 
 	s.getPreferences(app)

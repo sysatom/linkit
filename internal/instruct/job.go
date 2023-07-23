@@ -1,9 +1,11 @@
 package instruct
 
 import (
+	"encoding/json"
 	"fyne.io/fyne/v2"
 	"github.com/allegro/bigcache/v3"
 	"github.com/sysatom/linkit/internal/client"
+	"github.com/sysatom/linkit/internal/constant"
 	"github.com/sysatom/linkit/internal/instruct/bot"
 	"github.com/sysatom/linkit/internal/types"
 	"log"
@@ -26,7 +28,17 @@ func (i *instructJob) Run() {
 	if res == nil {
 		return
 	}
+	// get preference
+	d := i.app.Preferences().String(constant.InstructPreferenceKey)
+	data := types.KV{}
+	_ = json.Unmarshal([]byte(d), &data)
+	// instruct loop
 	for _, item := range res.Instruct {
+		// check switch
+		s, ok := data.String(item.Bot)
+		if !ok || s == "" || s == "Off" {
+			continue
+		}
 		// check has been run
 		has, _ := i.cache.Get(item.No)
 		if len(has) > 0 {

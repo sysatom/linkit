@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"encoding/json"
 	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
@@ -8,6 +9,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/sysatom/linkit/internal/client"
 	"github.com/sysatom/linkit/internal/constant"
+	"github.com/sysatom/linkit/internal/types"
 )
 
 type bots struct {
@@ -43,11 +45,19 @@ func (b *bots) buildUI(app fyne.App) *container.Scroll {
 		fmt.Println(err)
 	}
 	if res != nil {
+		d := b.preferences.String(constant.InstructPreferenceKey)
+		data := types.KV{}
+		_ = json.Unmarshal([]byte(d), &data)
 		for _, item := range res.Bots {
+			selected := "Off"
+			if s, ok := data.String(item.Id); ok {
+				selected = s
+			}
+			id := item.Id
 			options = append(options, item.Name)
 			co = append(co, container.NewGridWithColumns(2,
-				newBoldLabel(item.Name), &widget.RadioGroup{Options: onOffOptions, Horizontal: true, Required: true, OnChanged: func(val string) {
-					b.onSwitchChanged(item.Id, val)
+				newBoldLabel(item.Name), &widget.RadioGroup{Options: onOffOptions, Horizontal: true, Required: true, Selected: selected, OnChanged: func(val string) {
+					b.onSwitchChanged(id, val)
 				}},
 			))
 		}
@@ -86,7 +96,12 @@ func (b *bots) getPreferences(_ fyne.App) {
 }
 
 func (b *bots) onSwitchChanged(id, val string) {
-	fmt.Println(id, val)
+	d := b.preferences.String(constant.InstructPreferenceKey)
+	data := types.KV{}
+	_ = json.Unmarshal([]byte(d), &data)
+	data[id] = val
+	j, _ := json.Marshal(data)
+	b.preferences.SetString(constant.InstructPreferenceKey, string(j))
 }
 
 func onOrOff(on bool) string {
