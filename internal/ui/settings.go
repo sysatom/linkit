@@ -7,13 +7,9 @@ import (
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	"github.com/sysatom/linkit/internal/constant"
 	"github.com/sysatom/linkit/internal/util"
 	"strconv"
-)
-
-const (
-	tokenSettingKey    = "AccessToken"
-	intervalSettingKey = "RequestInterval"
 )
 
 type settings struct {
@@ -35,9 +31,9 @@ func newSettingsTab(app fyne.App, window fyne.Window) *container.TabItem {
 	}
 }
 
-func (s *settings) getPreferences(app fyne.App) {
-	s.tokenEntry.Text = s.preferences.String(tokenSettingKey)
-	s.intervalEntry.Text = fmt.Sprintf("%d", s.preferences.Int(intervalSettingKey))
+func (s *settings) getPreferences(_ fyne.App) {
+	s.tokenEntry.Text = s.preferences.String(constant.TokenPreferenceKey)
+	s.intervalEntry.Text = fmt.Sprintf("%d", s.preferences.Int(constant.IntervalPreferenceKey))
 }
 
 func (s *settings) buildUI(app fyne.App) *container.Scroll {
@@ -83,7 +79,12 @@ func (s *settings) onDownloadsPathSubmitted(d string) {
 }
 
 func (s *settings) onTokenChanged(val string) {
-	s.preferences.SetString(tokenSettingKey, val)
+	old := s.preferences.String(constant.TokenPreferenceKey)
+	if old != "" && old != val {
+		d := dialog.NewInformation("Info", "Setting a new token requires a restart of the application to take effect.", s.window)
+		d.Show()
+	}
+	s.preferences.SetString(constant.TokenPreferenceKey, val)
 }
 
 func (s *settings) onIntervalChanged(val string) {
@@ -94,7 +95,7 @@ func (s *settings) onIntervalChanged(val string) {
 		d.Show()
 		return
 	}
-	s.preferences.SetInt(intervalSettingKey, int(i))
+	s.preferences.SetInt(constant.IntervalPreferenceKey, int(i))
 }
 
 func newBoldLabel(text string) *widget.Label {

@@ -74,3 +74,26 @@ type BotsResult struct {
 		Name string `json:"name"`
 	} `json:"bots"`
 }
+
+func (v *Tinode) Pull() (*InstructResult, error) {
+	data, err := v.fetcher(Pull, nil)
+	if err != nil {
+		return nil, err
+	}
+	var r InstructResult
+	err = json.Unmarshal(data, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, err
+}
+
+type InstructResult struct {
+	Instruct []struct {
+		No       string      `json:"no"`
+		Bot      string      `json:"bot"`
+		Flag     string      `json:"flag"`
+		Content  interface{} `json:"content"`
+		ExpireAt string      `json:"expire_at"`
+	} `json:"instruct"`
+}

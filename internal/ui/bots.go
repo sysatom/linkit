@@ -7,9 +7,10 @@ import (
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	"github.com/sysatom/linkit/internal/client"
+	"github.com/sysatom/linkit/internal/constant"
 )
 
-type bot struct {
+type bots struct {
 	client      *client.Tinode
 	accessToken string
 
@@ -18,16 +19,16 @@ type bot struct {
 	preferences fyne.Preferences
 }
 
-func newBotTab(app fyne.App, window fyne.Window) *container.TabItem {
-	b := bot{app: app, window: window, preferences: app.Preferences()}
+func newBotsTab(app fyne.App, window fyne.Window) *container.TabItem {
+	b := bots{app: app, window: window, preferences: app.Preferences()}
 	return &container.TabItem{
-		Text:    "Bot",
+		Text:    "Bots",
 		Icon:    theme.ComputerIcon(),
 		Content: b.buildUI(app),
 	}
 }
 
-func (b *bot) buildUI(app fyne.App) *container.Scroll {
+func (b *bots) buildUI(app fyne.App) *container.Scroll {
 	onOffOptions := []string{"On", "Off"}
 
 	b.getPreferences(app)
@@ -45,7 +46,9 @@ func (b *bot) buildUI(app fyne.App) *container.Scroll {
 		for _, item := range res.Bots {
 			options = append(options, item.Name)
 			co = append(co, container.NewGridWithColumns(2,
-				newBoldLabel(item.Name), &widget.RadioGroup{Options: onOffOptions, Horizontal: true, Required: true, OnChanged: b.onSwitchChanged},
+				newBoldLabel(item.Name), &widget.RadioGroup{Options: onOffOptions, Horizontal: true, Required: true, OnChanged: func(val string) {
+					b.onSwitchChanged(item.Id, val)
+				}},
 			))
 		}
 	}
@@ -78,12 +81,12 @@ func (b *bot) buildUI(app fyne.App) *container.Scroll {
 	return container.NewScroll(panelContainer)
 }
 
-func (b *bot) getPreferences(app fyne.App) {
-	b.accessToken = b.preferences.String(tokenSettingKey)
+func (b *bots) getPreferences(_ fyne.App) {
+	b.accessToken = b.preferences.String(constant.TokenPreferenceKey)
 }
 
-func (b *bot) onSwitchChanged(val string) {
-	fmt.Println(val)
+func (b *bots) onSwitchChanged(id, val string) {
+	fmt.Println(id, val)
 }
 
 func onOrOff(on bool) string {
