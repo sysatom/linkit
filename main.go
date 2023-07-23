@@ -5,6 +5,7 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/driver/desktop"
 	"github.com/sysatom/linkit/internal"
+	"github.com/sysatom/linkit/internal/agent"
 	"github.com/sysatom/linkit/internal/assets"
 	"github.com/sysatom/linkit/internal/instruct"
 	"github.com/sysatom/linkit/internal/ui"
@@ -18,6 +19,7 @@ func main() {
 
 	// cron
 	instruct.Cron(a, w)
+	agent.Cron(a, w)
 
 	// theme
 	t := internal.NewAppTheme()

@@ -19,8 +19,8 @@ type instructJob struct {
 	client *client.Tinode
 }
 
-func (i *instructJob) Run() {
-	res, err := i.client.Pull()
+func (j *instructJob) Run() {
+	res, err := j.client.Pull()
 	if err != nil {
 		log.Println(err)
 		return
@@ -29,7 +29,7 @@ func (i *instructJob) Run() {
 		return
 	}
 	// get preference
-	d := i.app.Preferences().String(constant.InstructPreferenceKey)
+	d := j.app.Preferences().String(constant.InstructPreferenceKey)
 	data := types.KV{}
 	_ = json.Unmarshal([]byte(d), &data)
 	// instruct loop
@@ -40,7 +40,7 @@ func (i *instructJob) Run() {
 			continue
 		}
 		// check has been run
-		has, _ := i.cache.Get(item.No)
+		has, _ := j.cache.Get(item.No)
 		if len(has) > 0 {
 			continue
 		}
@@ -66,11 +66,11 @@ func (i *instructJob) Run() {
 				if v, ok := item.Content.(map[string]interface{}); ok {
 					data = v
 				}
-				err = do.Run(i.app, i.window, data)
+				err = do.Run(j.app, j.window, data)
 				if err != nil {
 					log.Println("instruct run job failed", item.Bot, item.No)
 				}
-				err = i.cache.Set(item.No, []byte("1"))
+				err = j.cache.Set(item.No, []byte("1"))
 				if err != nil {
 					log.Println(err)
 				}

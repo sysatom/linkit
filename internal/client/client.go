@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-resty/resty/v2"
+	"github.com/sysatom/linkit/internal/types"
 	"net/http"
 	"time"
 )
@@ -96,4 +97,12 @@ type InstructResult struct {
 		Content  interface{} `json:"content"`
 		ExpireAt string      `json:"expire_at"`
 	} `json:"instruct"`
+}
+
+func (v *Tinode) Agent(content types.AgentContent) (string, error) {
+	data, err := v.fetcher(Agent, content)
+	if err != nil {
+		return "", err
+	}
+	return string(data), err
 }
