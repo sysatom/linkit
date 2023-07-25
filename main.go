@@ -5,7 +5,10 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/driver/desktop"
 	"github.com/sysatom/linkit/internal/assets"
+	"github.com/sysatom/linkit/internal/pkg/constant"
+	"github.com/sysatom/linkit/internal/pkg/server"
 	"github.com/sysatom/linkit/internal/pkg/theme"
+	"github.com/sysatom/linkit/internal/pkg/util"
 	"github.com/sysatom/linkit/internal/ruleset/agent"
 	"github.com/sysatom/linkit/internal/ruleset/instruct"
 	"github.com/sysatom/linkit/internal/ui"
@@ -16,6 +19,12 @@ func main() {
 	a := app.NewWithID("com.github.sysatom.linkit")
 	assets.SetIcon(a)
 	w := a.NewWindow("Linkit")
+
+	// check singleton
+	util.CheckSingleton()
+
+	// embed server
+	server.EmbedServer(constant.EmbedServerPort)
 
 	// cron
 	instruct.Cron(a, w)
