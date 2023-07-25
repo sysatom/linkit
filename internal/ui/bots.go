@@ -7,9 +7,9 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"github.com/sysatom/linkit/internal/client"
-	"github.com/sysatom/linkit/internal/constant"
-	"github.com/sysatom/linkit/internal/types"
+	"github.com/sysatom/linkit/internal/pkg/client"
+	"github.com/sysatom/linkit/internal/pkg/constant"
+	"github.com/sysatom/linkit/internal/pkg/types"
 )
 
 type bots struct {

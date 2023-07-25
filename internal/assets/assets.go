@@ -5,6 +5,9 @@ import (
 	"fyne.io/fyne/v2"
 )
 
+//go:embed font/SourceHanSans-Medium.ttf
+var FontData []byte
+
 //go:embed icon/app-icon.png
 var iconData []byte
 

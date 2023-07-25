@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-resty/resty/v2"
-	"github.com/sysatom/linkit/internal/types"
+	"github.com/sysatom/linkit/internal/pkg/types"
 	"net/http"
 	"time"
 )

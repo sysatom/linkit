@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"fyne.io/fyne/v2"
 	"github.com/allegro/bigcache/v3"
-	"github.com/sysatom/linkit/internal/client"
-	"github.com/sysatom/linkit/internal/types"
+	"github.com/sysatom/linkit/internal/pkg/client"
+	"github.com/sysatom/linkit/internal/pkg/types"
 	"log"
 )
 

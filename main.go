@@ -4,10 +4,10 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/driver/desktop"
-	"github.com/sysatom/linkit/internal"
-	"github.com/sysatom/linkit/internal/agent"
 	"github.com/sysatom/linkit/internal/assets"
-	"github.com/sysatom/linkit/internal/instruct"
+	"github.com/sysatom/linkit/internal/pkg/theme"
+	"github.com/sysatom/linkit/internal/ruleset/agent"
+	"github.com/sysatom/linkit/internal/ruleset/instruct"
 	"github.com/sysatom/linkit/internal/ui"
 )
 
@@ -22,12 +22,12 @@ func main() {
 	agent.Cron(a, w)
 
 	// theme
-	t := internal.NewAppTheme()
+	t := theme.NewAppTheme()
 	a.Settings().SetTheme(t)
 
 	// systray
 	if desk, ok := a.(desktop.App); ok {
-		ui.SetupSystray(desk)
+		ui.SetupSystray(desk, w)
 	}
 
 	// main window

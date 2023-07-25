@@ -4,9 +4,9 @@ import (
 	"fyne.io/fyne/v2"
 	"github.com/allegro/bigcache/v3"
 	"github.com/robfig/cron/v3"
-	"github.com/sysatom/linkit/internal/agent/bot"
-	"github.com/sysatom/linkit/internal/client"
-	"github.com/sysatom/linkit/internal/util"
+	"github.com/sysatom/linkit/internal/pkg/client"
+	"github.com/sysatom/linkit/internal/pkg/util"
+	"github.com/sysatom/linkit/internal/ruleset/agent/bot"
 )
 
 type agentJob struct {

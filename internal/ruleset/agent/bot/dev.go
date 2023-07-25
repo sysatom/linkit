@@ -1,8 +1,8 @@
 package bot
 
 import (
-	"github.com/sysatom/linkit/internal/client"
-	"github.com/sysatom/linkit/internal/types"
+	"github.com/sysatom/linkit/internal/pkg/client"
+	"github.com/sysatom/linkit/internal/pkg/types"
 	"log"
 	"time"
 )

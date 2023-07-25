@@ -1,9 +1,10 @@
-package internal
+package theme
 
 import (
 	_ "embed"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/theme"
+	"github.com/sysatom/linkit/internal/assets"
 	"image/color"
 )
 
@@ -45,9 +46,6 @@ func (t *AppTheme) Size(name fyne.ThemeSizeName) float32 {
 	return theme.DefaultTheme().Size(name)
 }
 
-//go:embed assets/font/SourceHanSans-Medium.ttf
-var fontData []byte
-
 func (t *AppTheme) setDefaultResource() {
 	t.regular = theme.TextFont()
 	t.bold = theme.TextBoldFont()
@@ -57,7 +55,7 @@ func (t *AppTheme) setDefaultResource() {
 
 	abc := &fyne.StaticResource{
 		StaticName:    "SourceHanSans-Medium.ttf",
-		StaticContent: fontData,
+		StaticContent: assets.FontData,
 	}
 
 	t.regular = abc

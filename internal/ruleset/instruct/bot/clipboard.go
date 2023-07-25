@@ -2,10 +2,10 @@ package bot
 
 import (
 	"fyne.io/fyne/v2"
-	"github.com/sysatom/linkit/internal/types"
+	"github.com/sysatom/linkit/internal/pkg/types"
 )
 
-var clipboard = []Do{
+var clipboard = []Executor{
 	{
 		Flag: "clipboard_share",
 		Run: func(app fyne.App, window fyne.Window, data types.KV) error {
