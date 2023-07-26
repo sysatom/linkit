@@ -42,7 +42,7 @@ func (s *settings) getPreferences(_ fyne.App) {
 func (s *settings) buildUI(app fyne.App) *container.Scroll {
 	s.serverHostEntry = &widget.Entry{PlaceHolder: "Enter server host (eg. 127.0.0.1:6060)", OnChanged: s.onServerChanged}
 	pathSelector := &widget.Button{Icon: theme.FolderOpenIcon(), Importance: widget.LowImportance, OnTapped: s.onLogPathSelected}
-	s.logPathEntry = &widget.Entry{Wrapping: fyne.TextTruncate, OnSubmitted: s.onDownloadsPathSubmitted, ActionItem: pathSelector}
+	s.logPathEntry = &widget.Entry{Wrapping: fyne.TextTruncate, ActionItem: pathSelector}
 
 	s.tokenEntry = &widget.Entry{PlaceHolder: "Enter your bot access token.", Password: true, OnChanged: s.onTokenChanged}
 	s.intervalEntry = &widget.Entry{PlaceHolder: "60 sec", OnChanged: s.onIntervalChanged}
@@ -79,10 +79,6 @@ func (s *settings) onLogPathSelected() {
 
 	folder.Resize(util.WindowSizeToDialog(s.window.Canvas().Size()))
 	folder.Show()
-}
-
-func (s *settings) onDownloadsPathSubmitted(d string) {
-	fmt.Println(d)
 }
 
 func (s *settings) onServerChanged(val string) {

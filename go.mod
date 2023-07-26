@@ -8,6 +8,7 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/gofiber/fiber/v2 v2.48.0
 	github.com/robfig/cron/v3 v3.0.1
+	github.com/rs/zerolog v1.29.1
 )
 
 require (

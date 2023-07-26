@@ -6,8 +6,8 @@ import (
 	"errors"
 	"github.com/go-resty/resty/v2"
 	"github.com/sysatom/linkit/internal/pkg/client"
+	"github.com/sysatom/linkit/internal/pkg/logs"
 	"github.com/sysatom/linkit/internal/pkg/types"
-	"log"
 	"net/http"
 	"strconv"
 )
@@ -22,7 +22,7 @@ const (
 func AnkiStats(c *client.Tinode) {
 	html, err := getCollectionStatsHTML()
 	if err != nil {
-		log.Println(err)
+		logs.Error(err)
 		return
 	}
 	_, err = c.Agent(types.AgentContent{
@@ -33,14 +33,14 @@ func AnkiStats(c *client.Tinode) {
 		},
 	})
 	if err != nil {
-		log.Println(err)
+		logs.Error(err)
 	}
 }
 
 func AnkiReview(c *client.Tinode) {
 	num, err := getNumCardsReviewedToday()
 	if err != nil {
-		log.Println(err)
+		logs.Error(err)
 		return
 	}
 	_, err = c.Agent(types.AgentContent{
@@ -51,7 +51,7 @@ func AnkiReview(c *client.Tinode) {
 		},
 	})
 	if err != nil {
-		log.Println(err)
+		logs.Error(err)
 	}
 }
 

@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
+	"github.com/sysatom/linkit/internal/pkg/logs"
 	"net"
 )
 
@@ -21,7 +22,7 @@ func EmbedServer(port string) {
 
 		err := app.Listen(net.JoinHostPort("127.0.0.1", port))
 		if err != nil {
-			panic("embed server error")
+			logs.Fatal("embed server error")
 		}
 	}()
 }

@@ -2,13 +2,13 @@ package ui
 
 import (
 	"encoding/json"
-	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	"github.com/sysatom/linkit/internal/pkg/client"
 	"github.com/sysatom/linkit/internal/pkg/constant"
+	"github.com/sysatom/linkit/internal/pkg/logs"
 	"github.com/sysatom/linkit/internal/pkg/setting"
 	"github.com/sysatom/linkit/internal/pkg/types"
 )
@@ -41,7 +41,7 @@ func (b *bots) buildUI() *container.Scroll {
 
 	res, err := b.client.Bots()
 	if err != nil {
-		fmt.Println(err)
+		logs.Error(err)
 	}
 	if res != nil {
 		d := b.preferences.String(constant.InstructPreferenceKey)

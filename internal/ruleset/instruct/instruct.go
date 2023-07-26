@@ -7,6 +7,7 @@ import (
 	"github.com/robfig/cron/v3"
 	"github.com/sysatom/linkit/internal/pkg/client"
 	"github.com/sysatom/linkit/internal/pkg/constant"
+	"github.com/sysatom/linkit/internal/pkg/logs"
 	"time"
 )
 
@@ -17,12 +18,12 @@ func Cron(app fyne.App, window fyne.Window) {
 	if accessToken != "" {
 		cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(time.Hour))
 		if err != nil {
-			panic(err)
+			logs.Panic(err.Error())
 		}
 		job := &instructJob{app: app, window: window, client: client.NewTinode(accessToken), cache: cache}
 		_, err = c.AddJob("*/10 * * * * *", job)
 		if err != nil {
-			panic(err)
+			logs.Panic(err.Error())
 		}
 	}
 	c.Start()

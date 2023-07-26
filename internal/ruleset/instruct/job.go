@@ -1,13 +1,14 @@
 package instruct
 
 import (
+	"fmt"
 	"fyne.io/fyne/v2"
 	"github.com/allegro/bigcache/v3"
 	"github.com/sysatom/linkit/internal/pkg/client"
+	"github.com/sysatom/linkit/internal/pkg/logs"
 	"github.com/sysatom/linkit/internal/pkg/setting"
 	"github.com/sysatom/linkit/internal/pkg/types"
 	"github.com/sysatom/linkit/internal/ruleset/instruct/bot"
-	"log"
 	"time"
 )
 
@@ -21,7 +22,7 @@ type instructJob struct {
 func (j *instructJob) Run() {
 	res, err := j.client.Pull()
 	if err != nil {
-		log.Println(err)
+		logs.Error(err)
 		return
 	}
 	if res == nil {
@@ -58,18 +59,18 @@ func (j *instructJob) Run() {
 					continue
 				}
 				// run instruct
-				log.Println("instruct run job", item.Bot, item.No)
+				logs.Info("instruct run job %s %s", item.Bot, item.No)
 				data := types.KV{}
 				if v, ok := item.Content.(map[string]interface{}); ok {
 					data = v
 				}
 				err = do.Run(j.app, j.window, data)
 				if err != nil {
-					log.Println("instruct run job failed", item.Bot, item.No)
+					logs.Error(fmt.Errorf("instruct run job failed %s %s %s", item.Bot, item.No, err))
 				}
 				err = j.cache.Set(item.No, []byte("1"))
 				if err != nil {
-					log.Println(err)
+					logs.Error(err)
 				}
 			}
 		}

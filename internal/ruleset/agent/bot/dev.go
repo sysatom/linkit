@@ -2,8 +2,8 @@ package bot
 
 import (
 	"github.com/sysatom/linkit/internal/pkg/client"
+	"github.com/sysatom/linkit/internal/pkg/logs"
 	"github.com/sysatom/linkit/internal/pkg/types"
-	"log"
 	"time"
 )
 
@@ -21,6 +21,6 @@ func DevImport(c *client.Tinode) {
 		},
 	})
 	if err != nil {
-		log.Println(err)
+		logs.Error(err)
 	}
 }

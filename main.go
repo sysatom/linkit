@@ -6,6 +6,7 @@ import (
 	"fyne.io/fyne/v2/driver/desktop"
 	"github.com/sysatom/linkit/internal/assets"
 	"github.com/sysatom/linkit/internal/pkg/constant"
+	"github.com/sysatom/linkit/internal/pkg/logs"
 	"github.com/sysatom/linkit/internal/pkg/server"
 	"github.com/sysatom/linkit/internal/pkg/setting"
 	"github.com/sysatom/linkit/internal/pkg/theme"
@@ -21,11 +22,14 @@ func main() {
 	assets.SetIcon(a)
 	w := a.NewWindow(constant.AppTitle)
 
-	// check singleton
-	util.CheckSingleton()
-
 	// load preferences
 	setting.LoadPreferences(a.Preferences())
+
+	// logger
+	logs.Init()
+
+	// check singleton
+	util.CheckSingleton()
 
 	// embed server
 	server.EmbedServer(constant.EmbedServerPort)

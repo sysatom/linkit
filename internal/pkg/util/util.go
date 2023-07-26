@@ -3,6 +3,7 @@ package util
 import (
 	"fyne.io/fyne/v2"
 	"github.com/robfig/cron/v3"
+	"github.com/sysatom/linkit/internal/pkg/logs"
 )
 
 // WindowSizeToDialog scales the window size to a suitable dialog size.
@@ -14,6 +15,6 @@ func WindowSizeToDialog(s fyne.Size) fyne.Size {
 func MustAddFunc(c *cron.Cron, spec string, cmd func()) {
 	_, err := c.AddFunc(spec, cmd)
 	if err != nil {
-		panic(err)
+		logs.Panic(err.Error())
 	}
 }

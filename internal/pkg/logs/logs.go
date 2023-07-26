@@ -1,55 +1,65 @@
-// Package logs exposes info, warning and error loggers.
 package logs
 
 import (
+	"fmt"
+	"github.com/rs/zerolog"
+	"github.com/sysatom/linkit/internal/pkg/constant"
+	"github.com/sysatom/linkit/internal/pkg/setting"
 	"io"
 	"log"
-	"strings"
+	"os"
 )
 
-var (
-	// Info is a logger at the 'info' logging level.
-	Info *log.Logger
-	// Warn is a logger at the 'warning' logging level.
-	Warn *log.Logger
-	// Err is a logger at the 'error' logging level.
-	Err *log.Logger
-)
+var l zerolog.Logger
 
-func parseFlags(logFlags string) int {
-	flags := 0
-	for _, v := range strings.Split(logFlags, ",") {
-		switch {
-		case v == "date":
-			flags |= log.Ldate
-		case v == "time":
-			flags |= log.Ltime
-		case v == "microseconds":
-			flags |= log.Lmicroseconds
-		case v == "longfile":
-			flags |= log.Llongfile
-		case v == "shortfile":
-			flags |= log.Lshortfile
-		case v == "UTC":
-			flags |= log.LUTC
-		case v == "msgprefix":
-			flags |= log.Lmsgprefix
-		case v == "stdFlags":
-			flags |= log.LstdFlags
-		default:
-			log.Fatalln("Invalid log flags string: ", logFlags)
+func Init() {
+	var writer []io.Writer
+	// log file
+	logFileName := fmt.Sprintf("%s.log", constant.AppId)
+	logPath := setting.Get().LogPath
+	if _, err := os.Stat(logPath); !os.IsNotExist(err) {
+		logFilePath := fmt.Sprintf("%s/%s", logPath, logFileName)
+		var logFile *os.File
+		_, err = os.Stat(logFilePath)
+		if os.IsNotExist(err) {
+			logFile, err = os.Create(logFilePath)
+			if err != nil {
+				log.Panicln(err)
+			}
+		} else {
+			logFile, err = os.OpenFile(logFilePath, os.O_RDWR|os.O_APPEND, 0666)
 		}
+		console := zerolog.ConsoleWriter{Out: logFile, NoColor: true, TimeFormat: zerolog.TimeFieldFormat}
+		writer = append(writer, console)
 	}
-	if flags == 0 {
-		flags = log.LstdFlags
-	}
-	return flags
+	// console
+	console := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: zerolog.TimeFieldFormat}
+	writer = append(writer, console)
+
+	multi := zerolog.MultiLevelWriter(writer...)
+	l = zerolog.New(multi).With().Timestamp().Logger()
 }
 
-// Init initializes info, warning and error loggers given the flags and the output.
-func Init(output io.Writer, logFlags string) {
-	flags := parseFlags(logFlags)
-	Info = log.New(output, "I", flags)
-	Warn = log.New(output, "W", flags)
-	Err = log.New(output, "E", flags)
+func Debug(format string, a ...any) {
+	l.Debug().Caller(1).Msg(fmt.Sprintf(format, a...))
+}
+
+func Info(format string, a ...any) {
+	l.Info().Caller(1).Msg(fmt.Sprintf(format, a...))
+}
+
+func Warn(format string, a ...any) {
+	l.Warn().Caller(1).Msg(fmt.Sprintf(format, a...))
+}
+
+func Error(err error) {
+	l.Error().Caller(1).Msg(err.Error())
+}
+
+func Fatal(format string, a ...any) {
+	l.Fatal().Caller(1).Msg(fmt.Sprintf(format, a...))
+}
+
+func Panic(format string, a ...any) {
+	l.Panic().Caller(1).Msg(fmt.Sprintf(format, a...))
 }
