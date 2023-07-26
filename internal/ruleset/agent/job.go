@@ -5,6 +5,7 @@ import (
 	"github.com/allegro/bigcache/v3"
 	"github.com/robfig/cron/v3"
 	"github.com/sysatom/linkit/internal/pkg/client"
+	"github.com/sysatom/linkit/internal/pkg/logs"
 	"github.com/sysatom/linkit/internal/pkg/util"
 	"github.com/sysatom/linkit/internal/ruleset/agent/bot"
 )
@@ -18,21 +19,25 @@ type agentJob struct {
 
 func (j *agentJob) RunAnki(c *cron.Cron) {
 	util.MustAddFunc(c, "0 * * * * *", func() {
+		logs.Info("anki stats")
 		bot.AnkiStats(j.client)
 	})
 	util.MustAddFunc(c, "0 * * * * *", func() {
+		logs.Info("anki review")
 		bot.AnkiReview(j.client)
 	})
 }
 
 func (j *agentJob) RunClipboard(c *cron.Cron) {
 	util.MustAddFunc(c, "*/10 * * * * *", func() {
+		logs.Info("clipboard upload")
 		bot.ClipboardUpload(j.window, j.cache, j.client)
 	})
 }
 
 func (j *agentJob) RunDev(c *cron.Cron) {
 	util.MustAddFunc(c, "0 * * * * *", func() {
+		logs.Info("dev import")
 		bot.DevImport(j.client)
 	})
 }
