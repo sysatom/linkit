@@ -1,11 +1,10 @@
 package instruct
 
 import (
-	"encoding/json"
 	"fyne.io/fyne/v2"
 	"github.com/allegro/bigcache/v3"
 	"github.com/sysatom/linkit/internal/pkg/client"
-	"github.com/sysatom/linkit/internal/pkg/constant"
+	"github.com/sysatom/linkit/internal/pkg/setting"
 	"github.com/sysatom/linkit/internal/pkg/types"
 	"github.com/sysatom/linkit/internal/ruleset/instruct/bot"
 	"log"
@@ -29,13 +28,11 @@ func (j *instructJob) Run() {
 		return
 	}
 	// get preference
-	d := j.app.Preferences().String(constant.InstructPreferenceKey)
-	data := types.KV{}
-	_ = json.Unmarshal([]byte(d), &data)
+	switcher := setting.Get().InstructSwitch
 	// instruct loop
 	for _, item := range res.Instruct {
 		// check switch
-		s, ok := data.String(item.Bot)
+		s, ok := switcher.String(item.Bot)
 		if !ok || s == "" || s == "Off" {
 			continue
 		}

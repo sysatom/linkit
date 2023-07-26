@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-resty/resty/v2"
+	"github.com/sysatom/linkit/internal/pkg/setting"
 	"github.com/sysatom/linkit/internal/pkg/types"
+	"github.com/sysatom/linkit/internal/pkg/util"
 	"net/http"
 	"time"
 )
@@ -18,7 +20,7 @@ func NewTinode(accessToken string) *Tinode {
 	v := &Tinode{accessToken: accessToken}
 
 	v.c = resty.New()
-	v.c.SetBaseURL("http://127.0.0.1:6060")
+	v.c.SetBaseURL(util.FillScheme(setting.Get().ServerHost))
 	v.c.SetTimeout(time.Minute)
 
 	return v
@@ -70,6 +72,26 @@ func (v *Tinode) Bots() (*BotsResult, error) {
 }
 
 type BotsResult struct {
+	Bots []struct {
+		Id   string `json:"id"`
+		Name string `json:"name"`
+	} `json:"bots"`
+}
+
+func (v *Tinode) Help() (*HelpResult, error) {
+	data, err := v.fetcher(Help, nil)
+	if err != nil {
+		return nil, err
+	}
+	var r HelpResult
+	err = json.Unmarshal(data, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, err
+}
+
+type HelpResult struct {
 	Bots []struct {
 		Id   string `json:"id"`
 		Name string `json:"name"`

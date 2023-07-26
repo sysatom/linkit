@@ -13,9 +13,10 @@ import (
 )
 
 type settings struct {
-	downloadPathEntry *widget.Entry
-	tokenEntry        *widget.Entry
-	intervalEntry     *widget.Entry
+	serverHostEntry *widget.Entry
+	logPathEntry    *widget.Entry
+	tokenEntry      *widget.Entry
+	intervalEntry   *widget.Entry
 
 	preferences fyne.Preferences
 	window      fyne.Window
@@ -32,30 +33,38 @@ func newSettingsTab(app fyne.App, window fyne.Window) *container.TabItem {
 }
 
 func (s *settings) getPreferences(_ fyne.App) {
+	s.serverHostEntry.Text = s.preferences.String(constant.ServerPreferenceKey)
+	s.logPathEntry.Text = s.preferences.String(constant.LogPreferenceKey)
 	s.tokenEntry.Text = s.preferences.String(constant.TokenPreferenceKey)
 	s.intervalEntry.Text = fmt.Sprintf("%d", s.preferences.Int(constant.IntervalPreferenceKey))
 }
 
 func (s *settings) buildUI(app fyne.App) *container.Scroll {
-	pathSelector := &widget.Button{Icon: theme.FolderOpenIcon(), Importance: widget.LowImportance, OnTapped: s.onDownloadsPathSelected}
-	s.downloadPathEntry = &widget.Entry{Wrapping: fyne.TextTruncate, OnSubmitted: s.onDownloadsPathSubmitted, ActionItem: pathSelector}
+	s.serverHostEntry = &widget.Entry{PlaceHolder: "Enter server host (eg. 127.0.0.1:6060)", OnChanged: s.onServerChanged}
+	pathSelector := &widget.Button{Icon: theme.FolderOpenIcon(), Importance: widget.LowImportance, OnTapped: s.onLogPathSelected}
+	s.logPathEntry = &widget.Entry{Wrapping: fyne.TextTruncate, OnSubmitted: s.onDownloadsPathSubmitted, ActionItem: pathSelector}
 
 	s.tokenEntry = &widget.Entry{PlaceHolder: "Enter your bot access token.", Password: true, OnChanged: s.onTokenChanged}
 	s.intervalEntry = &widget.Entry{PlaceHolder: "60 sec", OnChanged: s.onIntervalChanged}
 
 	s.getPreferences(app)
 
+	systemContainer := container.NewGridWithColumns(2,
+		newBoldLabel("Server host"), s.serverHostEntry,
+		newBoldLabel("Logs path"), s.logPathEntry,
+	)
 	botContainer := container.NewGridWithColumns(2,
-		newBoldLabel("Token"), s.tokenEntry,
-		newBoldLabel("Interval"), s.intervalEntry,
+		newBoldLabel("Access token"), s.tokenEntry,
+		newBoldLabel("Request Interval"), s.intervalEntry,
 	)
 
 	return container.NewScroll(container.NewVBox(
-		&widget.Card{Title: "Bot settings", Content: botContainer},
+		&widget.Card{Title: "System", Content: systemContainer},
+		&widget.Card{Title: "Bot", Content: botContainer},
 	))
 }
 
-func (s *settings) onDownloadsPathSelected() {
+func (s *settings) onLogPathSelected() {
 	folder := dialog.NewFolderOpen(func(folder fyne.ListableURI, err error) {
 		if err != nil {
 			fyne.LogError("Error on selecting folder", err)
@@ -64,10 +73,8 @@ func (s *settings) onDownloadsPathSelected() {
 		} else if folder == nil {
 			return
 		}
-
-		fmt.Println(folder.Path())
-		s.preferences.SetString("DownloadPath", folder.Path())
-		s.downloadPathEntry.SetText(folder.Path())
+		s.preferences.SetString(constant.LogPreferenceKey, folder.Path())
+		s.logPathEntry.SetText(folder.Path())
 	}, s.window)
 
 	folder.Resize(util.WindowSizeToDialog(s.window.Canvas().Size()))
@@ -78,12 +85,11 @@ func (s *settings) onDownloadsPathSubmitted(d string) {
 	fmt.Println(d)
 }
 
+func (s *settings) onServerChanged(val string) {
+	s.preferences.SetString(constant.ServerPreferenceKey, val)
+}
+
 func (s *settings) onTokenChanged(val string) {
-	old := s.preferences.String(constant.TokenPreferenceKey)
-	if old != "" && old != val {
-		d := dialog.NewInformation("Info", "Setting a new token requires a restart of the application to take effect.", s.window)
-		d.Show()
-	}
 	s.preferences.SetString(constant.TokenPreferenceKey, val)
 }
 

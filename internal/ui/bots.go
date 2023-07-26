@@ -9,12 +9,12 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/sysatom/linkit/internal/pkg/client"
 	"github.com/sysatom/linkit/internal/pkg/constant"
+	"github.com/sysatom/linkit/internal/pkg/setting"
 	"github.com/sysatom/linkit/internal/pkg/types"
 )
 
 type bots struct {
-	client      *client.Tinode
-	accessToken string
+	client *client.Tinode
 
 	app         fyne.App
 	window      fyne.Window
@@ -26,15 +26,14 @@ func newBotsTab(app fyne.App, window fyne.Window) *container.TabItem {
 	return &container.TabItem{
 		Text:    "Bots",
 		Icon:    theme.ComputerIcon(),
-		Content: b.buildUI(app),
+		Content: b.buildUI(),
 	}
 }
 
-func (b *bots) buildUI(app fyne.App) *container.Scroll {
+func (b *bots) buildUI() *container.Scroll {
 	onOffOptions := []string{"On", "Off"}
 
-	b.getPreferences(app)
-	b.client = client.NewTinode(b.accessToken)
+	b.client = client.NewTinode(setting.Get().AccessToken)
 
 	var options []string
 	var co []fyne.CanvasObject
@@ -91,10 +90,6 @@ func (b *bots) buildUI(app fyne.App) *container.Scroll {
 	return container.NewScroll(panelContainer)
 }
 
-func (b *bots) getPreferences(_ fyne.App) {
-	b.accessToken = b.preferences.String(constant.TokenPreferenceKey)
-}
-
 func (b *bots) onSwitchChanged(id, val string) {
 	d := b.preferences.String(constant.InstructPreferenceKey)
 	data := types.KV{}
@@ -102,12 +97,4 @@ func (b *bots) onSwitchChanged(id, val string) {
 	data[id] = val
 	j, _ := json.Marshal(data)
 	b.preferences.SetString(constant.InstructPreferenceKey, string(j))
-}
-
-func onOrOff(on bool) string {
-	if on {
-		return "On"
-	}
-
-	return "Off"
 }

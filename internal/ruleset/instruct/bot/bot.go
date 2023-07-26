@@ -13,4 +13,5 @@ type Executor struct {
 var DoInstruct = map[string][]Executor{
 	"dev":       dev,
 	"clipboard": clipboard,
+	"url":       url,
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/sysatom/linkit/internal/assets"
 	"github.com/sysatom/linkit/internal/pkg/constant"
 	"github.com/sysatom/linkit/internal/pkg/server"
+	"github.com/sysatom/linkit/internal/pkg/setting"
 	"github.com/sysatom/linkit/internal/pkg/theme"
 	"github.com/sysatom/linkit/internal/pkg/util"
 	"github.com/sysatom/linkit/internal/ruleset/agent"
@@ -16,12 +17,15 @@ import (
 
 func main() {
 	// app
-	a := app.NewWithID("com.github.sysatom.linkit")
+	a := app.NewWithID(constant.AppId)
 	assets.SetIcon(a)
-	w := a.NewWindow("Linkit")
+	w := a.NewWindow(constant.AppTitle)
 
 	// check singleton
 	util.CheckSingleton()
+
+	// load preferences
+	setting.LoadPreferences(a.Preferences())
 
 	// embed server
 	server.EmbedServer(constant.EmbedServerPort)
