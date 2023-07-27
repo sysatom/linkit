@@ -59,7 +59,7 @@ func (j *instructJob) Run() {
 					continue
 				}
 				// run instruct
-				logs.Info("instruct run job %s %s", item.Bot, item.No)
+				logs.Info("[instruct] %s %s", item.Bot, item.No)
 				data := types.KV{}
 				if v, ok := item.Content.(map[string]interface{}); ok {
 					data = v

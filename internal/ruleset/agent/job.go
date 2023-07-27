@@ -19,25 +19,25 @@ type agentJob struct {
 
 func (j *agentJob) RunAnki(c *cron.Cron) {
 	util.MustAddFunc(c, "0 * * * * *", func() {
-		logs.Info("anki stats")
+		logs.Info("[agent] anki stats")
 		bot.AnkiStats(j.client)
 	})
 	util.MustAddFunc(c, "0 * * * * *", func() {
-		logs.Info("anki review")
+		logs.Info("[agent] anki review")
 		bot.AnkiReview(j.client)
 	})
 }
 
 func (j *agentJob) RunClipboard(c *cron.Cron) {
 	util.MustAddFunc(c, "*/10 * * * * *", func() {
-		logs.Info("clipboard upload")
+		logs.Info("[agent] clipboard upload")
 		bot.ClipboardUpload(j.window, j.cache, j.client)
 	})
 }
 
 func (j *agentJob) RunDev(c *cron.Cron) {
 	util.MustAddFunc(c, "0 * * * * *", func() {
-		logs.Info("dev import")
+		logs.Info("[agent] dev import")
 		bot.DevImport(j.client)
 	})
 }
