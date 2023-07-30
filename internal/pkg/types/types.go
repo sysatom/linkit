@@ -7,11 +7,11 @@ import (
 	"reflect"
 )
 
-type KV map[string]interface{}
+type KV map[string]any
 
-func (j *KV) Scan(value interface{}) error {
+func (j *KV) Scan(value any) error {
 	if bytes, ok := value.([]byte); ok {
-		result := make(map[string]interface{})
+		result := make(map[string]any)
 		err := json.Unmarshal(bytes, &result)
 		if err != nil {
 			return err
@@ -19,7 +19,7 @@ func (j *KV) Scan(value interface{}) error {
 		*j = result
 		return nil
 	}
-	if result, ok := value.(map[string]interface{}); ok {
+	if result, ok := value.(map[string]any); ok {
 		*j = result
 		return nil
 	}
@@ -65,16 +65,16 @@ func (j KV) Float64(key string) (float64, bool) {
 	return 0, false
 }
 
-func (j KV) Map(key string) (map[string]interface{}, bool) {
+func (j KV) Map(key string) (map[string]any, bool) {
 	if v, ok := j.get(key); ok {
-		if t, ok := v.(map[string]interface{}); ok {
+		if t, ok := v.(map[string]any); ok {
 			return t, ok
 		}
 	}
 	return nil, false
 }
 
-func (j KV) get(key string) (interface{}, bool) {
+func (j KV) get(key string) (any, bool) {
 	v, ok := j[key]
 	return v, ok
 }
@@ -93,4 +93,24 @@ func (j KV) Uint64Value() (uint64, bool) {
 
 func (j KV) Float64Value() (float64, bool) {
 	return j.Float64("value")
+}
+
+type Action string
+
+type Data struct {
+	Action  Action `json:"action"`
+	Version int    `json:"version"`
+	Content KV     `json:"content"`
+}
+
+// ClientComMessage is a wrapper for client messages.
+type ClientComMessage struct {
+	Data Data `json:"data"`
+}
+
+// ServerComMessage is a wrapper for server-side messages.
+type ServerComMessage struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Data    any    `json:"data"`
 }

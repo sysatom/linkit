@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-resty/resty/v2"
+	"github.com/sysatom/linkit/internal/pkg/constant"
 	"github.com/sysatom/linkit/internal/pkg/setting"
 	"github.com/sysatom/linkit/internal/pkg/types"
 	"github.com/sysatom/linkit/internal/pkg/util"
@@ -26,19 +27,11 @@ func NewTinode(accessToken string) *Tinode {
 	return v
 }
 
-type Operate string
-
-const (
-	Agent Operate = "agent"
-	Bots  Operate = "bots"
-	Pull  Operate = "pull"
-	Help  Operate = "help"
-)
-
-func (v *Tinode) fetcher(action Operate, content interface{}) ([]byte, error) {
+func (v *Tinode) fetcher(action types.Action, content any) ([]byte, error) {
 	resp, err := v.c.R().
 		SetHeader("Authorization", fmt.Sprintf("Bearer %s", v.accessToken)).
-		SetBody(map[string]interface{}{
+		SetResult(&types.ServerComMessage{}).
+		SetBody(map[string]any{
 			"action":  action,
 			"version": 1,
 			"content": content,
@@ -49,7 +42,8 @@ func (v *Tinode) fetcher(action Operate, content interface{}) ([]byte, error) {
 	}
 
 	if resp.StatusCode() == http.StatusOK {
-		return resp.Body(), nil
+		r := resp.Result().(*types.ServerComMessage)
+		return json.Marshal(r.Data)
 	} else {
 		return nil, fmt.Errorf("%d, %s (%s)",
 			resp.StatusCode(),
@@ -59,12 +53,12 @@ func (v *Tinode) fetcher(action Operate, content interface{}) ([]byte, error) {
 }
 
 func (v *Tinode) Bots() (*BotsResult, error) {
-	data, err := v.fetcher(Bots, nil)
+	data, err := v.fetcher(constant.Bots, nil)
 	if err != nil {
 		return nil, err
 	}
 	var r BotsResult
-	err = json.Unmarshal(data, &r)
+	err = json.Unmarshal(data, &r.Bots)
 	if err != nil {
 		return nil, err
 	}
@@ -79,12 +73,12 @@ type BotsResult struct {
 }
 
 func (v *Tinode) Help() (*HelpResult, error) {
-	data, err := v.fetcher(Help, nil)
+	data, err := v.fetcher(constant.Help, nil)
 	if err != nil {
 		return nil, err
 	}
 	var r HelpResult
-	err = json.Unmarshal(data, &r)
+	err = json.Unmarshal(data, &r.Bots)
 	if err != nil {
 		return nil, err
 	}
@@ -99,12 +93,12 @@ type HelpResult struct {
 }
 
 func (v *Tinode) Pull() (*InstructResult, error) {
-	data, err := v.fetcher(Pull, nil)
+	data, err := v.fetcher(constant.Pull, nil)
 	if err != nil {
 		return nil, err
 	}
 	var r InstructResult
-	err = json.Unmarshal(data, &r)
+	err = json.Unmarshal(data, &r.Instruct)
 	if err != nil {
 		return nil, err
 	}
@@ -113,16 +107,16 @@ func (v *Tinode) Pull() (*InstructResult, error) {
 
 type InstructResult struct {
 	Instruct []struct {
-		No       string      `json:"no"`
-		Bot      string      `json:"bot"`
-		Flag     string      `json:"flag"`
-		Content  interface{} `json:"content"`
-		ExpireAt string      `json:"expire_at"`
+		No       string `json:"no"`
+		Bot      string `json:"bot"`
+		Flag     string `json:"flag"`
+		Content  any    `json:"content"`
+		ExpireAt string `json:"expire_at"`
 	} `json:"instruct"`
 }
 
 func (v *Tinode) Agent(content types.AgentContent) (string, error) {
-	data, err := v.fetcher(Agent, content)
+	data, err := v.fetcher(constant.Agent, content)
 	if err != nil {
 		return "", err
 	}

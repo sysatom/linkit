@@ -28,7 +28,7 @@ func AnkiStats(c *client.Tinode) {
 	_, err = c.Agent(types.AgentContent{
 		Id:      StatsAgentID,
 		Version: AnkiAgentVersion,
-		Content: map[string]interface{}{
+		Content: map[string]any{
 			"html": html,
 		},
 	})
@@ -46,7 +46,7 @@ func AnkiReview(c *client.Tinode) {
 	_, err = c.Agent(types.AgentContent{
 		Id:      ReviewAgentID,
 		Version: AnkiAgentVersion,
-		Content: map[string]interface{}{
+		Content: map[string]any{
 			"num": num,
 		},
 	})
@@ -62,7 +62,7 @@ func getCollectionStatsHTML() (string, error) {
 		SetBody(Param{
 			Action:  "getCollectionStatsHTML",
 			Version: ApiVersion,
-			Params: map[string]interface{}{
+			Params: map[string]any{
 				"wholeCollection": true,
 			},
 		}).
@@ -117,9 +117,9 @@ const ApiVersion = 6
 const ApiURI = "http://localhost:8765"
 
 type Param struct {
-	Action  string      `json:"action"`
-	Version int         `json:"version"`
-	Params  interface{} `json:"params,omitempty"`
+	Action  string `json:"action"`
+	Version int    `json:"version"`
+	Params  any    `json:"params,omitempty"`
 }
 
 type Response struct {

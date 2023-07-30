@@ -11,6 +11,7 @@ import (
 	"github.com/sysatom/linkit/internal/pkg/setting"
 	"github.com/sysatom/linkit/internal/pkg/theme"
 	"github.com/sysatom/linkit/internal/pkg/util"
+	"github.com/sysatom/linkit/internal/pkg/wb"
 	"github.com/sysatom/linkit/internal/ruleset/agent"
 	"github.com/sysatom/linkit/internal/ruleset/instruct"
 	"github.com/sysatom/linkit/internal/ui"
@@ -33,6 +34,9 @@ func main() {
 
 	// embed server
 	server.EmbedServer(constant.EmbedServerPort)
+
+	// websocket
+	wb.Init()
 
 	// cron
 	instruct.Cron(a, w)
