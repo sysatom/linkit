@@ -1,6 +1,7 @@
 package wb
 
 import (
+	"fyne.io/fyne/v2"
 	"github.com/gorilla/websocket"
 	"github.com/sysatom/linkit/internal/pkg/logs"
 	"github.com/sysatom/linkit/internal/pkg/setting"
@@ -11,7 +12,7 @@ import (
 
 var sessionStore = NewSessionStore(idleSessionTimeout + 15*time.Second)
 
-func Init() {
+func Init(app fyne.App, window fyne.Window) {
 	u := url.URL{
 		Scheme: "ws",
 		Host:   setting.Get().ServerHost,
@@ -30,17 +31,6 @@ func Init() {
 
 	sess, count := sessionStore.NewSession(conn, "")
 	logs.Info("ws: session started %s %d", sess.sid, count)
-
-	//go func() {
-	//	for {
-	//		_, message, err := conn.ReadMessage()
-	//		if err != nil {
-	//			logs.Info("read: %s", err)
-	//			return
-	//		}
-	//		logs.Info("recv: %s", message)
-	//	}
-	//}()
 
 	// Do work in goroutines to return from serveWebSocket() to release file pointers.
 	// Otherwise, "too many open files" will happen.

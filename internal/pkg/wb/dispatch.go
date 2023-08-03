@@ -7,4 +7,6 @@ import (
 
 func (s *Session) dispatch(msg *types.ServerComMessage) {
 	fmt.Println(msg)
+	// todo msg.data to instruct
+	// todo instruct.RunInstruct(app, window, cache, item)
 }

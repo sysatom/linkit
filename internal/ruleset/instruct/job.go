@@ -50,29 +50,37 @@ func (j *instructJob) Run() {
 		if time.Now().After(expiredAt) {
 			continue
 		}
-		for id, dos := range bot.DoInstruct {
-			if item.Bot != id {
+		err = RunInstruct(j.app, j.window, j.cache, item)
+		if err != nil {
+			logs.Error(fmt.Errorf("instruct run job failed %s %s %s", item.Bot, item.No, err))
+		}
+	}
+}
+
+func RunInstruct(app fyne.App, window fyne.Window, cache *bigcache.BigCache, item client.Instruct) error {
+	for id, dos := range bot.DoInstruct {
+		if item.Bot != id {
+			continue
+		}
+		for _, do := range dos {
+			if item.Flag != do.Flag {
 				continue
 			}
-			for _, do := range dos {
-				if item.Flag != do.Flag {
-					continue
-				}
-				// run instruct
-				logs.Info("[instruct] %s %s", item.Bot, item.No)
-				data := types.KV{}
-				if v, ok := item.Content.(map[string]any); ok {
-					data = v
-				}
-				err = do.Run(j.app, j.window, data)
-				if err != nil {
-					logs.Error(fmt.Errorf("instruct run job failed %s %s %s", item.Bot, item.No, err))
-				}
-				err = j.cache.Set(item.No, []byte("1"))
-				if err != nil {
-					logs.Error(err)
-				}
+			// run instruct
+			logs.Info("[instruct] %s %s", item.Bot, item.No)
+			data := types.KV{}
+			if v, ok := item.Content.(map[string]any); ok {
+				data = v
+			}
+			err := do.Run(app, window, data)
+			if err != nil {
+				return err
+			}
+			err = cache.Set(item.No, []byte("1"))
+			if err != nil {
+				return err
 			}
 		}
 	}
+	return nil
 }

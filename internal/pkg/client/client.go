@@ -106,13 +106,15 @@ func (v *Tinode) Pull() (*InstructResult, error) {
 }
 
 type InstructResult struct {
-	Instruct []struct {
-		No       string `json:"no"`
-		Bot      string `json:"bot"`
-		Flag     string `json:"flag"`
-		Content  any    `json:"content"`
-		ExpireAt string `json:"expire_at"`
-	} `json:"instruct"`
+	Instruct []Instruct `json:"instruct"`
+}
+
+type Instruct struct {
+	No       string `json:"no"`
+	Bot      string `json:"bot"`
+	Flag     string `json:"flag"`
+	Content  any    `json:"content"`
+	ExpireAt string `json:"expire_at"`
 }
 
 func (v *Tinode) Agent(content types.AgentContent) (string, error) {

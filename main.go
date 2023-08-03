@@ -36,7 +36,7 @@ func main() {
 	server.EmbedServer(constant.EmbedServerPort)
 
 	// websocket
-	wb.Init()
+	wb.Init(a, w) // todo app.context
 
 	// cron
 	instruct.Cron(a, w)
